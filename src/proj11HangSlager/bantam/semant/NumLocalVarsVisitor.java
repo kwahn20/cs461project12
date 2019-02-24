@@ -27,9 +27,9 @@ import proj11HangSlager.bantam.visitor.Visitor;
  */
 public class NumLocalVarsVisitor extends Visitor{
 
-    private ArrayList<Integer> numVars = new ArrayList<>();
-    private ArrayList<String> methodNames = new ArrayList<>();
-    private int numCurVars = 0;
+    private Map<String, Integer> localVars;
+    private String className;
+    private int numCurVars;
 
     /**
      * Creates a map of every method and the number of
@@ -39,12 +39,10 @@ public class NumLocalVarsVisitor extends Visitor{
      * @return Map<String, Integer>
      */
     public Map<String,Integer> getNumLocalVars(Program ast){
-        Map<String,Integer> numVarsMap = new HashMap<String,Integer>();
+        numCurVars = 0;
+        localVars = new HashMap<>();
         ast.accept(this);
-        for(int i = 0; i < numVars.size(); i++){
-            numVarsMap.put(methodNames.get(i).substring(4), numVars.get(i));
-        }
-        return numVarsMap;
+        return localVars;
     }
 
     /**
@@ -58,13 +56,8 @@ public class NumLocalVarsVisitor extends Visitor{
      * @return
      */
     public Object visit(Class_ node){
-        super.visit(node);
-        for(int i = 0; i < methodNames.size(); i++){
-            if(!methodNames.get(i).contains("%%%%")) {
-                methodNames.set(i, "%%%%" + node.getName() + "." + methodNames.get(i));
-            }
-        }
-        return null;
+        className = node.getName();
+        return super.visit(node);
     }
 
     /**
@@ -77,10 +70,9 @@ public class NumLocalVarsVisitor extends Visitor{
      * @return
      */
     public Object visit(Method node){
-        super.visit(node);
-        methodNames.add(node.getName());
-        numVars.add(numCurVars);
-        numCurVars = 0;
+        numCurVars = node.getFormalList().getSize();
+        node.getStmtList().accept(this);
+        localVars.put(className + "." + node.getName(), numCurVars);
         return null;
     }
 
@@ -96,9 +88,58 @@ public class NumLocalVarsVisitor extends Visitor{
     public Object visit(DeclStmt node){
         numCurVars++;
         return null;
-
     }
 
+    /**
+     * Overrides to avoid visiting
+     * @param node the expression node
+     * @return
+     */
+    public Object visit(Expr node){
+        return null;
+    }
+
+    /**
+     * Overrides to avoid visiting
+     * @param node the if statement node
+     * @return
+     */
+    public Object visit(IfStmt node){
+        if(node.getElseStmt() != null){
+            node.getElseStmt().accept(this);
+        }
+        return null;
+    }
+
+    /**
+     * Overrides to avoid visiting
+     * @param node the for statement node
+     * @return
+     */
+    public Object visit(ForStmt node){
+        node.getBodyStmt().accept(this);
+        return null;
+    }
+
+    /**
+     * Overrides to avoid visiting
+     * @param node the while statement node
+     * @return
+     */
+    public Object visit(WhileStmt node){
+        node.getBodyStmt().accept(this);
+        return null;
+    }
+
+
+    /**
+     * Overrides to avoid visiting
+     * @param node the return statement node
+     * @return
+     */
+    public Object visit(ReturnStmt node){
+        return null;
+    }
 
 
 

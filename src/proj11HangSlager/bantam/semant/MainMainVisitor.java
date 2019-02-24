@@ -36,8 +36,24 @@ public class MainMainVisitor extends Visitor{
      * @return boolean of existance
      */
     public boolean hasMain(Program ast) {
+        hasBeenFound = false;
         ast.accept(this);
         return hasBeenFound;
+    }
+
+    /**
+     * Visits the list of classes
+     *
+     * @param node the class list node
+     * @return
+     */
+    public Object visit(ClassList node){
+        for( ASTNode astNode: node){
+            if(!hasBeenFound){
+                astNode.accept(this);
+            }
+        }
+        return null;
     }
 
     /**
@@ -48,8 +64,8 @@ public class MainMainVisitor extends Visitor{
      */
     public Object visit(Class_ node){
         super.visit(node);
-        if(node.getName().equals("Main")){
-            node.getMemberList().accept(this);
+        if(!node.getName().equals("Main")){
+            hasBeenFound = false;
         }
 
         return null;
@@ -66,6 +82,15 @@ public class MainMainVisitor extends Visitor{
         if((node.getName().equals("main")) && (node.getFormalList().getSize() == 0) && (node.getReturnType().equals("void"))) {
             hasBeenFound = true;
         }
+        return null;
+    }
+
+    /**
+     * Avoids going through each expression
+     * @param node the field node
+     * @return null
+     */
+    public Object visit(Field node){
         return null;
     }
 }
