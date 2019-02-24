@@ -121,6 +121,12 @@ public class SemanticAnalyzer
         // step 1:  add built-in classes to classMap
         addBuiltins();
 
+        addUserClasses();
+
+        buildClassEnvironments();
+
+
+
 
         // add code here...
 
@@ -214,7 +220,7 @@ public class SemanticAnalyzer
     }
 
     public void buildClassEnvironments() {
-        EnvironmentBuilder environmentBuilder = new EnvironmentBuilder();
-        //environmentBuilder.build();
+        EnvironmentBuilder environmentBuilder = new EnvironmentBuilder(this.classMap, this.root, this.errorHandler, this.program);
+        environmentBuilder.build();
     }
 }

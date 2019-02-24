@@ -25,6 +25,26 @@ public class TypeCheckerVisitor extends Visitor
     public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap){
         this.classMap = classMap;
     }
+
+    /**
+     * Method returns boolean after determining if a node is a subtype of another
+     * @param node1
+     * @param node2
+     * @return
+     */
+    public boolean isSubTypeOf(String node1, String node2){
+        if(currentClass.getClassMap().get(node1).getParent().equals("Object")){
+            return node1.equals(node2);
+        }
+        else{
+            return currentClass.getClassMap().get(node1).getParent().equals(node2);
+        }
+    }
+
+    public boolean isClassType(String node){
+        return currentClass.getClassMap().containsKey(node) || node.equals("boolean") || node.equals("int") || node.equals("String");
+    }
+
     /**
      * Visit a field node
      *
@@ -35,7 +55,7 @@ public class TypeCheckerVisitor extends Visitor
         // The fields should have already been added to the symbol table by the
         // SemanticAnalyzer so the only thing to check is the compatibility of the init
         // expr's type with the field's type.
-        if (currentSymbolTable.lookup(node.getType()) == null) {
+        if (!isClassType(node.getType())) {
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The declared type " + node.getType() + " of the field "
@@ -44,7 +64,7 @@ public class TypeCheckerVisitor extends Visitor
         Expr initExpr = node.getInit();
         if (initExpr != null) {
             initExpr.accept(this);
-            if(!currentSymbolTable.lookup(initExpr.getExprType()).equals(node.getType())) {
+            if(!isSubTypeOf(initExpr.getExprType(),node.getType())) {
                 errorHandler.register(Error.Kind.SEMANT_ERROR,
                         currentClass.getASTNode().getFilename(), node.getLineNum(),
                         "The type of the initializer is " + initExpr.getExprType()
@@ -65,7 +85,7 @@ public class TypeCheckerVisitor extends Visitor
      * @return null
      */
     public Object visit(Method node) {
-        if (currentSymbolTable.lookup(node.getReturnType()) == null && !node.getReturnType().equals("void")){
+        if (!isClassType(node.getReturnType()) && !node.getReturnType().equals("void")){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The return type " + node.getReturnType() + " of the method "
@@ -87,7 +107,7 @@ public class TypeCheckerVisitor extends Visitor
      * @return null
      */
     public Object visit(Formal node) {
-        if (currentSymbolTable.lookup(node.getType()) == null) {
+        if (!isClassType(node.getType())) {
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The declared type " + node.getType() + " of the formal" +
@@ -172,7 +192,7 @@ public class TypeCheckerVisitor extends Visitor
         node.getRightExpr().accept(this);
         String leftExprType = node.getLeftExpr().getExprType();
         String rightExprType = node.getRightExpr().getExprType();
-        if(!currentSymbolTable.lookup(leftExprType).equals(currentSymbolTable.lookup(rightExprType)) || !leftExprType.equals("int")) {
+        if(!leftExprType.equals(rightExprType) || !leftExprType.equals("int")) {
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The values of this Arithmetic Expression are "+ node.getLeftExpr().getExprType()
@@ -250,7 +270,7 @@ public class TypeCheckerVisitor extends Visitor
         node.getRightExpr().accept(this);
         String leftExprType = node.getLeftExpr().getExprType();
         String rightExprType = node.getRightExpr().getExprType();
-        if(!currentSymbolTable.lookup(leftExprType).equals(currentSymbolTable.lookup(rightExprType)) || !input) {
+        if(!leftExprType.equals(rightExprType) || !input) {
             if(type == "boolean") {
                 errorHandler.register(Error.Kind.SEMANT_ERROR,
                         currentClass.getASTNode().getFilename(), node.getLineNum(),

@@ -43,8 +43,6 @@ public class ClassTreeNodeBuilder extends Visitor {
         else{
             this.dependenciesSet.add(node.getName());
         }
-
-        this.dependenciesSet.add(node.getName());
         node.getChildrenList().forEachRemaining(child -> checkDependencies(child));
 
     }
