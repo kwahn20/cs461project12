@@ -1,0 +1,25 @@
+class Main{
+	int s = 0; 
+	int t = 1; 
+	String x = "hi";
+	String b = "hip";
+	String l = "hillo";
+	boolean b = 3;
+	int[] arr = new int[3];
+	void add(){
+		boolean u = true;
+        var isij = false;
+	}
+}
+
+
+class Lucas{
+    void saveLives(){
+        var didHeSaveMyLife = true;
+    }
+
+    void destroyLives(){
+        var pleaseNo = false;
+        var yesYes = true;
+    }
+}
