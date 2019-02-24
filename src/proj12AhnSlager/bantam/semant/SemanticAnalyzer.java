@@ -30,6 +30,7 @@ package proj12AhnSlager.bantam.semant;
 
 import proj12AhnSlager.bantam.ast.*;
 import proj12AhnSlager.bantam.util.*;
+import proj12AhnSlager.bantam.util.Error;
 
 import java.util.*;
 
@@ -82,12 +83,19 @@ public class SemanticAnalyzer
     private final int MAX_NUM_FIELDS = 1500;
 
     /**
+     * Controls list of nodes that have been visited to confirm that cyclic dependencies do not exist
+     */
+    private HashSet<String> dependenciesSet;
+
+    /**
      * SemanticAnalyzer constructor
      *
      * @param errorHandler the ErrorHandler to use for reporting errors
      */
     public SemanticAnalyzer(ErrorHandler errorHandler) {
+
         this.errorHandler = errorHandler;
+        this.dependenciesSet = new HashSet<>();
     }
 
     /**
@@ -118,6 +126,16 @@ public class SemanticAnalyzer
 
         // uncomment the following statement
         return root;
+    }
+
+    public void checkCyclicDependencies(ClassTreeNode node){
+        if(this.dependenciesSet.contains(node.getName())){
+            errorHandler.register(Error.Kind.SEMANT_ERROR, "Cyclic Dependency detected with " + node.getName());
+        }
+        else{
+            this.dependenciesSet.add(node.getName());
+        }
+
     }
 
     /**
@@ -191,6 +209,12 @@ public class SemanticAnalyzer
     }
 
     public void addUserClasses() {
+        ClassTreeNodeBuilder classTreeNodeBuilder = new ClassTreeNodeBuilder(this.classMap, this.errorHandler, this.program);
+        classTreeNodeBuilder.build();
+    }
 
+    public void buildClassEnvironments() {
+        EnvironmentBuilder environmentBuilder = new EnvironmentBuilder();
+        //environmentBuilder.build();
     }
 }

@@ -1,10 +1,11 @@
 package proj12AhnSlager.bantam.semant;
 
+import proj12AhnSlager.bantam.util.Error;
 import proj12AhnSlager.bantam.visitor.Visitor;
 import proj12AhnSlager.bantam.util.*;
-import proj12AhnSlager.bantam.semant.*;
 import proj12AhnSlager.bantam.ast.*;
 
+import java.util.HashSet;
 import java.util.Hashtable;
 
 public class ClassTreeNodeBuilder extends Visitor {
@@ -14,13 +15,38 @@ public class ClassTreeNodeBuilder extends Visitor {
      */
     private Hashtable<String, ClassTreeNode> classMap;
     private ErrorHandler errorHandler;
+    private Program program;
+    private HashSet<String> dependenciesSet;
 
-    public ClassTreeNodeBuilder(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler){
+    public ClassTreeNodeBuilder(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
         this.classMap = classMap;
+        this.program = program;
         this.errorHandler = errorHandler;
+        this.dependenciesSet = new HashSet<>();
     }
-    public void buildClasses(Program ast){
-        super.visit(ast);
+    public void build(){
+        this.program.accept(this);
+    }
+
+    /**
+     * Checks within the dependenciesSet HashSet to determine if the dependenciesSet contains the current ClassTreeNode
+     * If it does, it represents a cyclic dependency
+     * If not, then we add the name to the HashSet
+     * We always iterate through the ChildrenList and check the dependencies of the children then
+     *
+     * @param node
+     */
+    public void checkDependencies(ClassTreeNode node){
+        if(this.dependenciesSet.contains(node.getName())){
+            errorHandler.register(Error.Kind.SEMANT_ERROR, "Cyclic Dependency detected with " + node.getName());
+        }
+        else{
+            this.dependenciesSet.add(node.getName());
+        }
+
+        this.dependenciesSet.add(node.getName());
+        node.getChildrenList().forEachRemaining(child -> checkDependencies(child));
+
     }
 
     /**
@@ -31,7 +57,9 @@ public class ClassTreeNodeBuilder extends Visitor {
     @Override
     public Object visit(Class_ node){
         ClassTreeNode classNode = new ClassTreeNode(node, false, true, this.classMap);
-        classMap.put(node.getName(),classNode);
+        ClassTreeNode object = this.classMap.get("Object");
+        checkDependencies(object);
+        classMap.put(node.getName(), classNode);
         return null;
 
     }
