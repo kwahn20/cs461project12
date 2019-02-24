@@ -1,4 +1,7 @@
 package proj12AhnSlager.bantam.semant;
 
-public class EnvironmentBuilder extends  {
+import proj12AhnSlager.bantam.visitor.Visitor;
+
+public class EnvironmentBuilder extends Visitor {
+
 }

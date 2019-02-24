@@ -7,10 +7,10 @@ import proj12AhnSlager.bantam.util.ErrorHandler;
 import proj12AhnSlager.bantam.util.Error;
 
 
-import proj11HangSlager.bantam.ast.*;
-import proj11HangSlager.bantam.util.ErrorHandler;
-import proj11HangSlager.bantam.util.Error;
-import proj11HangSlager.bantam.visitor.Visitor;
+import proj12AhnSlager.bantam.ast.*;
+import proj12AhnSlager.bantam.util.ErrorHandler;
+import proj12AhnSlager.bantam.util.Error;
+import proj12AhnSlager.bantam.visitor.Visitor;
 
 import java.util.Hashtable;
 

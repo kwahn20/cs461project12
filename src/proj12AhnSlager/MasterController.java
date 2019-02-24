@@ -92,9 +92,9 @@ public class MasterController {
         closeMenuItem.disableProperty().bind(listProperty.emptyProperty());
         scanButton.disableProperty().bind(listProperty.emptyProperty());
         scanAndParseButton.disableProperty().bind(listProperty.emptyProperty());
-        checkMainBtn.disableProperty().bind(listProperty.emptyProperty());
-        checkStringBtn.disableProperty().bind(listProperty.emptyProperty());
-        checkLocalVarBtn.disableProperty().bind(listProperty.emptyProperty());
+//        checkMainBtn.disableProperty().bind(listProperty.emptyProperty());
+//        checkStringBtn.disableProperty().bind(listProperty.emptyProperty());
+//        checkLocalVarBtn.disableProperty().bind(listProperty.emptyProperty());
 
 
         // this line from JianQuanMarcello project 6
