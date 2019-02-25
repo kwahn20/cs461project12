@@ -30,6 +30,7 @@ package proj12AhnSlager.bantam.semant;
 
 import proj12AhnSlager.FileController;
 import proj12AhnSlager.bantam.ast.*;
+import proj12AhnSlager.bantam.parser.Parser;
 import proj12AhnSlager.bantam.util.*;
 import proj12AhnSlager.bantam.util.Error;
 
@@ -56,6 +57,8 @@ public class SemanticAnalyzer
      */
     public static final Set<String> reservedIdentifiers = new HashSet<>(Arrays.asList(
             "null", "this", "super", "void", "int", "boolean"));
+
+    private static String curFilename;
 
     /**
      * Root of the AST
@@ -95,7 +98,6 @@ public class SemanticAnalyzer
      * @param errorHandler the ErrorHandler to use for reporting errors
      */
     public SemanticAnalyzer(ErrorHandler errorHandler) {
-
         this.errorHandler = errorHandler;
         this.dependenciesSet = new HashSet<>();
     }
@@ -210,19 +212,66 @@ public class SemanticAnalyzer
         ?*/false, classMap));
     }
 
+    /**
+     *
+     */
     public void addUserClasses() {
         ClassTreeNodeBuilder classTreeNodeBuilder = new ClassTreeNodeBuilder(this.classMap, this.errorHandler, this.program);
         classTreeNodeBuilder.build();
     }
 
+    /**
+     *
+     */
     public void buildClassEnvironments() {
         EnvironmentBuilder environmentBuilder = new EnvironmentBuilder(this.classMap, this.root, this.errorHandler, this.program);
         environmentBuilder.build();
     }
 
-//    private static void main(String args[]){
-//        if (args.length == 0){
-//            this.console.writeLine("Scan and parse of file was successful.", "CONS");
-//        }
-//    }
+    /**
+     *
+     * @param args the filenames to be analyzed
+     */
+    public static void main(String args[]){
+        ErrorHandler errorHandler;
+        ErrorHandler checkErrorHandler;
+        Parser parser;
+        Program ast;
+        SemanticAnalyzer semAnalyzer;
+        Boolean parseComplete;
+
+        // if statement to check that there is at least 1 file in the arguments
+        if (args.length == 0){
+            System.out.println("Please include at least 1 filename in arguments");
+            return;
+        }
+
+        // loops through all of the filenames and for each file does the following
+        for (int i = 0; i < args.length; i++){
+            errorHandler = new ErrorHandler();
+            checkErrorHandler = new ErrorHandler();
+            parser = new Parser(errorHandler);
+            ast = null;
+            semAnalyzer = new SemanticAnalyzer(checkErrorHandler);
+            try {
+                ast = parser.parse(args[i]);
+                System.out.println("Parsing Successful");
+                parseComplete = true;
+            }
+            catch(CompilationException e){
+                //TODO add in error reporting w errorHandler
+                parseComplete = false;
+            }
+
+            if (parseComplete){
+                try{
+                    semAnalyzer.analyze(ast);
+                    System.out.println("Analyzing Successful");
+                }
+                catch (RuntimeException e){
+                    //TODO add in error reporting w checkerErrorHandler
+                }
+            }
+        }
+    }
 }

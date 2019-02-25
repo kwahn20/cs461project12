@@ -198,7 +198,7 @@ public class MasterController {
             errorHelper(scanningErrors);
         }
         else{
-            this.console.writeLine("Scan of file was successful.", "CONS");
+            this.console.writeLine("Scan, Parse and Check of file was successful.", "CONS");
 
         }
     }
