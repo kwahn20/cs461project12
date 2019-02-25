@@ -17,10 +17,11 @@ public class TypeCheckerVisitor extends Visitor
 
     private Hashtable<String, ClassTreeNode> classMap;
 
-    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
-
+    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, ClassTreeNode currentClass, Program program){
         this.classMap = classMap;
+        this.currentClass = currentClass;
         this.errorHandler = errorHandler;
+        this.currentSymbolTable = null;
         this.program = program;
 
     }
@@ -37,16 +38,20 @@ public class TypeCheckerVisitor extends Visitor
      * @return
      */
     public boolean isSubTypeOf(String node1, String node2){
-        if(currentClass.getClassMap().get(node1).getParent().equals("Object")){
-            return node1.equals(node2);
-        }
-        else{
-            return currentClass.getClassMap().get(node1).getParent().equals(node2);
-        }
+        return false;
     }
 
     public boolean isClassType(String node){
-        return currentClass.getClassMap().containsKey(node) || node.equals("boolean") || node.equals("int") || node.equals("String");
+        return  currentClass.getClassMap().containsKey(node) || node.equals("boolean") || node.equals("int") || node.equals("String");
+    }
+
+    public Object visit(Class_ node){
+        currentClass = this.classMap.get(node.getName());
+        currentClass.setParent(classMap.get(node.getParent()));
+
+        currentSymbolTable = currentClass.getVarSymbolTable();
+        node.getMemberList().forEach(m->m.accept(this));
+        return null;
     }
 
     /**
@@ -69,6 +74,7 @@ public class TypeCheckerVisitor extends Visitor
         if (initExpr != null) {
             initExpr.accept(this);
             if(!isSubTypeOf(initExpr.getExprType(),node.getType())) {
+                System.out.println(initExpr.getExprType());
                 errorHandler.register(Error.Kind.SEMANT_ERROR,
                         currentClass.getASTNode().getFilename(), node.getLineNum(),
                         "The type of the initializer is " + initExpr.getExprType()

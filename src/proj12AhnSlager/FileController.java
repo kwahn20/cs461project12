@@ -400,6 +400,7 @@ public class FileController {
                     Drawer drawer = new Drawer();
                     drawer.draw(filename, root);
                 }
+                System.out.println(root);
                 return root;
             }
 

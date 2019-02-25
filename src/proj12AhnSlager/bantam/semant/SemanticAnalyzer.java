@@ -70,8 +70,7 @@ public class SemanticAnalyzer
     /**
      * Maps class names to ClassTreeNode objects representing the class
      */
-    private Hashtable<String, ClassTreeNode> classMap = new Hashtable<String,
-            ClassTreeNode>();
+    private Hashtable<String, ClassTreeNode> classMap = new Hashtable<String, ClassTreeNode>();
 
     /**
      * error handling
@@ -121,7 +120,6 @@ public class SemanticAnalyzer
         this.program = program;
         this.classMap.clear();
 
-        // step 1:  add built-in classes to classMap
         addBuiltins();
 
         // step 2: add user-defined classes to classMap
@@ -136,7 +134,7 @@ public class SemanticAnalyzer
                     "The main method has not been properly declared");
         }
 
-        TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.program);
+        TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.root, this.program);
         typeCheckerVisitor.beginTypeChecking();
 
         return root;
