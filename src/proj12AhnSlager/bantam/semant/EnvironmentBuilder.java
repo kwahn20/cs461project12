@@ -1,3 +1,9 @@
+/**
+ * Filename: EnvironmentBuilder
+ * Names: Kevin Ahn and Kyle Slager
+ * CS461
+ * Project 12
+ */
 package proj12AhnSlager.bantam.semant;
 
 import proj12AhnSlager.bantam.ast.*;
@@ -11,6 +17,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 
 /**
+ * Class to build the environment that is used for the analyze method in the
+ * SemanticAnalyzer
  * @author Kevin Ahn, Kyle Slager
  */
 public class EnvironmentBuilder extends Visitor {
@@ -24,7 +32,7 @@ public class EnvironmentBuilder extends Visitor {
     private Program program;
 
     /**
-     *
+     * Constructor for the EnvironmentBuilder
      * @param classMap
      * @param currClass
      * @param errorHandler
@@ -73,13 +81,16 @@ public class EnvironmentBuilder extends Visitor {
 
         String declaredName = node.getName();
 
+        // checks against the set of illegal names and registers an error if one is found
         if(this.illegalNames.contains(declaredName)){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The name " + declaredName + " is reserved");
         }
 
+        // gets the VarSymbolTable and checks that the first element is not null
         if(this.currentClass.getVarSymbolTable().peek(declaredName) != null){
+            // checks against previously declared variables
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The name " + declaredName + " has been declared prior");
@@ -90,7 +101,7 @@ public class EnvironmentBuilder extends Visitor {
     }
 
     /**
-     *
+     * overrides the method visit method from the visitor class
      * @param node the method node
      * @return
      */
@@ -123,7 +134,8 @@ public class EnvironmentBuilder extends Visitor {
 
 
     /**
-     *
+     * Overrides the visit method for the WhileStmt
+     * enter and exit the proper scopes
      * @param node the WhileStmt node
      * @return
      */
@@ -136,7 +148,8 @@ public class EnvironmentBuilder extends Visitor {
     }
 
     /**
-     *
+     * Overrides the visit method for the ForStmt
+     * enter and exit the proper scopes
      * @param node the ForStmt node
      * @return
      */

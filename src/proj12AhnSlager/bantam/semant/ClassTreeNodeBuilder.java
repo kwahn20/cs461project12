@@ -1,3 +1,9 @@
+/**
+ * Filename: ClassTreeNodeBuilder
+ * Names: Kevin Ahn and Kyle Slager
+ * CS461
+ * Project 12
+ */
 package proj12AhnSlager.bantam.semant;
 
 import proj12AhnSlager.bantam.util.Error;
@@ -8,6 +14,11 @@ import proj12AhnSlager.bantam.ast.*;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+/**
+ * A class to build the ClassTreeNodes which extends the visitor
+ * to override the visit method to put the proper nodes in the classMap
+ * @author KevinAhn, KyleSlager
+ */
 public class ClassTreeNodeBuilder extends Visitor {
 
     /**
@@ -18,12 +29,22 @@ public class ClassTreeNodeBuilder extends Visitor {
     private Program program;
     private HashSet<String> dependenciesSet;
 
+    /**
+     * Constructor for the class
+     * @param classMap
+     * @param errorHandler
+     * @param program
+     */
     public ClassTreeNodeBuilder(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
         this.classMap = classMap;
         this.program = program;
         this.errorHandler = errorHandler;
         this.dependenciesSet = new HashSet<>();
     }
+
+    /**
+     * method to call the programs accept method
+     */
     public void build(){
         this.program.accept(this);
     }

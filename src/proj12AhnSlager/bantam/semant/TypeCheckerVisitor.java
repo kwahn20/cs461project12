@@ -1,3 +1,10 @@
+/**
+ * Filename: TypeCheckerVisitor
+ * Names: Kevin Ahn and Kyle Slager
+ * CS461
+ * Project 12
+ */
+
 package proj12AhnSlager.bantam.semant;
 import proj12AhnSlager.bantam.ast.*;
 import proj12AhnSlager.bantam.util.ClassTreeNode;
@@ -5,9 +12,12 @@ import proj12AhnSlager.bantam.util.SymbolTable;
 import proj12AhnSlager.bantam.visitor.Visitor;
 import proj12AhnSlager.bantam.util.ErrorHandler;
 import proj12AhnSlager.bantam.util.Error;
-
 import java.util.Hashtable;
 
+/**
+ *
+ * @author KevinAhn, KyleSlager
+ */
 public class TypeCheckerVisitor extends Visitor
 {
     private ClassTreeNode currentClass;
@@ -17,6 +27,12 @@ public class TypeCheckerVisitor extends Visitor
 
     private Hashtable<String, ClassTreeNode> classMap;
 
+    /**
+     *
+     * @param classMap
+     * @param errorHandler
+     * @param program
+     */
     public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
         this.classMap = classMap;
         this.errorHandler = errorHandler;
@@ -25,6 +41,10 @@ public class TypeCheckerVisitor extends Visitor
 
     }
 
+    /**
+     *
+     * @param currentClass
+     */
     public void beginTypeChecking(ClassTreeNode currentClass){
         this.currentClass = currentClass;
         this.currentSymbolTable = this.currentClass.getVarSymbolTable();
@@ -43,6 +63,11 @@ public class TypeCheckerVisitor extends Visitor
         return false;
     }
 
+    /**
+     *
+     * @param node
+     * @return
+     */
     public boolean isClassType(String node){
         return  currentClass.getClassMap().containsKey(node) || node.equals("boolean") || node.equals("int") || node.equals("String");
     }
