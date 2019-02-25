@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import proj12AhnSlager.bantam.ast.Program;
 import proj12AhnSlager.bantam.semant.SemanticAnalyzer;
 import proj12AhnSlager.bantam.util.CompilationException;
 import proj12AhnSlager.bantam.util.Error;
@@ -164,7 +165,7 @@ public class MasterController {
             return;
         }
 
-        List<Error> scanningErrors = fileController.getErrors();
+        List<Error> scanningErrors = fileController.getAnalysisErrors();
 
         if (scanningErrors != null) {
 

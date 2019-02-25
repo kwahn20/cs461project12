@@ -77,6 +77,7 @@ public class FileController {
     private Scanner scanner;
     private Parser parser;
     private ErrorHandler errorHandler;
+    private ErrorHandler analysisErrors;
 
     /**
      * Constructor for the class. Intializes the save status
@@ -400,7 +401,6 @@ public class FileController {
                     Drawer drawer = new Drawer();
                     drawer.draw(filename, root);
                 }
-                System.out.println(root);
                 return root;
             }
 
@@ -450,13 +450,19 @@ public class FileController {
     public ClassTreeNode handleAnalyze(Event event){
         Program program;
         try{
-            program = scanOrParseHelper(event, "PARSE_NO_TREE_DRAWN");
+            program = scanOrParseHelper(event, "SCAN_AND_PARSE");
         }
         catch(CompilationException e){
             throw e;
         }
         SemanticAnalyzer analyzer = new SemanticAnalyzer(errorHandler);
-        return analyzer.analyze(program);
+        ClassTreeNode analysis = analyzer.analyze(program);
+        analysisErrors = analyzer.getErrorHandler();
+        return analysis;
+    }
+
+    public List<Error> getAnalysisErrors(){
+        return analysisErrors.getErrorList();
     }
 
     /**
