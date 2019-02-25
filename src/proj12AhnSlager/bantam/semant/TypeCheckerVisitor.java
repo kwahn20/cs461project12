@@ -19,11 +19,21 @@ public class TypeCheckerVisitor extends Visitor
     private ClassTreeNode currentClass;
     private SymbolTable currentSymbolTable;
     private ErrorHandler errorHandler;
+    private Program program;
 
     private Hashtable<String, ClassTreeNode> classMap;
 
-    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap){
+    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
+
         this.classMap = classMap;
+        this.errorHandler = errorHandler;
+        this.program = program;
+
+    }
+
+    public Object beginTypeChecking(){
+        this.program.accept(this);
+        return null;
     }
 
     /**

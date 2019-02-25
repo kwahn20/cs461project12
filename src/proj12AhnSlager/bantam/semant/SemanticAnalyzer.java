@@ -32,6 +32,7 @@ import proj12AhnSlager.bantam.ast.*;
 import proj12AhnSlager.bantam.util.*;
 import proj12AhnSlager.bantam.util.Error;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -125,12 +126,15 @@ public class SemanticAnalyzer
 
         buildClassEnvironments();
 
+        MainMainVisitor mainVisitor = new MainMainVisitor();
+        if(!mainVisitor.hasMain(program)){
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    "The main method has not been properly declared");
+        }
 
+        TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.program);
+        typeCheckerVisitor.beginTypeChecking();
 
-
-        // add code here...
-
-        // uncomment the following statement
         return root;
     }
 
