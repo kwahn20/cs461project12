@@ -47,7 +47,7 @@ public class Main extends Application{
         stage.setOnCloseRequest((e) -> mc.handleExit(e));
 
         Scene scene = new Scene(root, 1000, 600);
-        stage.setTitle("Project 09");
+        stage.setTitle("Project 12");
         stage.setScene(scene);
         stage.show();
     }

@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 
+/**
+ * @author Kevin Ahn, Kyle Slager
+ */
 public class EnvironmentBuilder extends Visitor {
     /**
      * Maps class names to ClassTreeNode objects representing the class
@@ -20,7 +23,13 @@ public class EnvironmentBuilder extends Visitor {
     private ErrorHandler errorHandler;
     private Program program;
 
-
+    /**
+     *
+     * @param classMap
+     * @param currClass
+     * @param errorHandler
+     * @param program
+     */
     public EnvironmentBuilder(Hashtable classMap, ClassTreeNode currClass, ErrorHandler errorHandler, Program program){
         this.classMap = classMap;
         this.currentClass = currClass;
@@ -28,11 +37,21 @@ public class EnvironmentBuilder extends Visitor {
         this.errorHandler = errorHandler;
         this.illegalNames = new HashSet<String>(Arrays.asList("null", "this", "super", "void", "int", "boolean"));
     }
+
+    /**
+     * build method to set the current class to null and call the programs accept method
+     */
     public void build(){
         this.currentClass = null;
         this.program.accept(this);
     }
 
+    /**
+     * overrides the Class_ visit method to get the current class'
+     * symbol tables
+     * @param node the class node
+     * @return
+     */
     public Object visit(Class_ node){
         currentClass = this.classMap.get(node.getName());
         currentClass.getVarSymbolTable().enterScope();
@@ -44,10 +63,16 @@ public class EnvironmentBuilder extends Visitor {
         return null;
     }
 
+    /**
+     * overrides the Field visit method to get the current class'
+     * symbol tables. Checks against illegal names or previously declared names
+     * @param node the field node
+     * @return
+     */
     public Object visit(Field node) {
 
         String declaredName = node.getName();
-        
+
         if(this.illegalNames.contains(declaredName)){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
@@ -64,6 +89,11 @@ public class EnvironmentBuilder extends Visitor {
         return null;
     }
 
+    /**
+     *
+     * @param node the method node
+     * @return
+     */
     public Object visit(Method node){
 
         String declaredName = node.getName();
@@ -92,5 +122,29 @@ public class EnvironmentBuilder extends Visitor {
     }
 
 
+    /**
+     *
+     * @param node the WhileStmt node
+     * @return
+     */
+    @Override
+    public Object visit(WhileStmt node){
+        currentClass.getVarSymbolTable().enterScope();
+        super.visit(node);
+        currentClass.getVarSymbolTable().exitScope();
+        return null;
+    }
 
+    /**
+     *
+     * @param node the ForStmt node
+     * @return
+     */
+    @Override
+    public Object visit(ForStmt node){
+        currentClass.getVarSymbolTable().enterScope();
+        super.visit(node);
+        currentClass.getVarSymbolTable().exitScope();
+        return null;
+    }
 }

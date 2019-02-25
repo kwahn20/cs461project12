@@ -102,7 +102,7 @@
         <!--<Button fx:id="checkMainBtn" onAction="#handleMainCheck" text="Check Main"/>-->
         <!--<Button fx:id="checkStringBtn" onAction="#handleStrConstCheck" text="Check String Constants"/>-->
         <!--<Button fx:id="checkLocalVarBtn" onAction="#handleNumLocVarCheck" text="Check # Local Variables"/>-->
-        <Button fx:id="scanParseAndCheck" onAction="#handleScanParseAndCheck" text="Scan Parse and Check"/>
+        <Button fx:id="scanParseAndCheckBtn" onAction="#handleScanParseAndCheck" text="Scan Parse and Check"/>
     </ToolBar>
 
         <SplitPane orientation="VERTICAL" focusTraversable="true" VBox.vgrow="ALWAYS">

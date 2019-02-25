@@ -39,12 +39,14 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import proj12AhnSlager.bantam.semant.MainMainVisitor;
 import proj12AhnSlager.bantam.semant.NumLocalVarsVisitor;
+import proj12AhnSlager.bantam.semant.SemanticAnalyzer;
 import proj12AhnSlager.bantam.semant.StringConstantsVisitor;
 import proj12AhnSlager.bantam.ast.Program;
 import proj12AhnSlager.bantam.lexer.Scanner;
 import proj12AhnSlager.bantam.lexer.Token;
 import proj12AhnSlager.bantam.parser.Parser;
 import proj12AhnSlager.bantam.treedrawer.Drawer;
+import proj12AhnSlager.bantam.util.ClassTreeNode;
 import proj12AhnSlager.bantam.util.CompilationException;
 import proj12AhnSlager.bantam.util.Error;
 import proj12AhnSlager.bantam.util.ErrorHandler;
@@ -437,6 +439,23 @@ public class FileController {
         MainMainVisitor mainVisitor = new MainMainVisitor();
         return mainVisitor.hasMain(program);
 
+    }
+
+    /**
+     * Scans and Parses and then checks the program using the semantic analyzer
+     * @param event
+     * @return
+     */
+    public ClassTreeNode handleAnalyze(Event event){
+        Program program;
+        try{
+            program = scanOrParseHelper(event, "PARSE_NO_TREE_DRAWN");
+        }
+        catch(CompilationException e){
+            throw e;
+        }
+        SemanticAnalyzer analyzer = new SemanticAnalyzer(errorHandler);
+        return analyzer.analyze(program);
     }
 
     /**

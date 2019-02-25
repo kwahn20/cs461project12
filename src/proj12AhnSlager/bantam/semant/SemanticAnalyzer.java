@@ -28,6 +28,7 @@
 
 package proj12AhnSlager.bantam.semant;
 
+import proj12AhnSlager.FileController;
 import proj12AhnSlager.bantam.ast.*;
 import proj12AhnSlager.bantam.util.*;
 import proj12AhnSlager.bantam.util.Error;
@@ -88,6 +89,7 @@ public class SemanticAnalyzer
      */
     private HashSet<String> dependenciesSet;
 
+
     /**
      * SemanticAnalyzer constructor
      *
@@ -122,8 +124,10 @@ public class SemanticAnalyzer
         // step 1:  add built-in classes to classMap
         addBuiltins();
 
+        // step 2: add user-defined classes to classMap
         addUserClasses();
 
+        // step 3: builds the environment
         buildClassEnvironments();
 
         MainMainVisitor mainVisitor = new MainMainVisitor();
@@ -136,16 +140,6 @@ public class SemanticAnalyzer
         typeCheckerVisitor.beginTypeChecking();
 
         return root;
-    }
-
-    public void checkCyclicDependencies(ClassTreeNode node){
-        if(this.dependenciesSet.contains(node.getName())){
-            errorHandler.register(Error.Kind.SEMANT_ERROR, "Cyclic Dependency detected with " + node.getName());
-        }
-        else{
-            this.dependenciesSet.add(node.getName());
-        }
-
     }
 
     /**
@@ -227,4 +221,10 @@ public class SemanticAnalyzer
         EnvironmentBuilder environmentBuilder = new EnvironmentBuilder(this.classMap, this.root, this.errorHandler, this.program);
         environmentBuilder.build();
     }
+
+//    private static void main(String args[]){
+//        if (args.length == 0){
+//            this.console.writeLine("Scan and parse of file was successful.", "CONS");
+//        }
+//    }
 }

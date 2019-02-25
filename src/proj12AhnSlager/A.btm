@@ -5,10 +5,8 @@ class Main{
 	String b = "hip";
 	String l = "hillo";
 	boolean b = 3;
-	int[] arr = new int[3];
 	void add(){
-		boolean u = true;
-        var isij = false;
+        	var isij = false;
 	}
 }
 

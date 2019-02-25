@@ -6,12 +6,6 @@ import proj12AhnSlager.bantam.visitor.Visitor;
 import proj12AhnSlager.bantam.util.ErrorHandler;
 import proj12AhnSlager.bantam.util.Error;
 
-
-import proj12AhnSlager.bantam.ast.*;
-import proj12AhnSlager.bantam.util.ErrorHandler;
-import proj12AhnSlager.bantam.util.Error;
-import proj12AhnSlager.bantam.visitor.Visitor;
-
 import java.util.Hashtable;
 
 public class TypeCheckerVisitor extends Visitor

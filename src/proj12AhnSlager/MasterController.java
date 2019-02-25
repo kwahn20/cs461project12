@@ -27,8 +27,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import proj12AhnSlager.bantam.semant.SemanticAnalyzer;
 import proj12AhnSlager.bantam.util.CompilationException;
 import proj12AhnSlager.bantam.util.Error;
+import proj12AhnSlager.bantam.util.ErrorHandler;
 
 /**
  * This is the master controller for the program. it references
@@ -67,13 +69,14 @@ public class MasterController {
     @FXML private Button checkMainBtn;
     @FXML private Button checkStringBtn;
     @FXML private Button checkLocalVarBtn;
-    @FXML private Button scanParseAndCheck;
+    @FXML private Button scanParseAndCheckBtn;
 
 
 
 
     private EditController editController;
     private FileController fileController;
+    private ErrorHandler errorHandler;
 
 
     // this line from JianQuanMarcello project 6
@@ -84,6 +87,7 @@ public class MasterController {
 
         editController = new EditController(javaTabPane, findTextEntry, findPrevBtn, findNextBtn, replaceTextEntry);
         this.fileController = new FileController(vBox,javaTabPane);
+        this.errorHandler = new ErrorHandler();
 
         SimpleListProperty<Tab> listProperty = new SimpleListProperty<Tab> (javaTabPane.getTabs());
         editMenu.disableProperty().bind(listProperty.emptyProperty());
@@ -92,6 +96,7 @@ public class MasterController {
         closeMenuItem.disableProperty().bind(listProperty.emptyProperty());
         scanButton.disableProperty().bind(listProperty.emptyProperty());
         scanAndParseButton.disableProperty().bind(listProperty.emptyProperty());
+        scanParseAndCheckBtn.disableProperty().bind(listProperty.emptyProperty());
 //        checkMainBtn.disableProperty().bind(listProperty.emptyProperty());
 //        checkStringBtn.disableProperty().bind(listProperty.emptyProperty());
 //        checkLocalVarBtn.disableProperty().bind(listProperty.emptyProperty());
@@ -150,7 +155,25 @@ public class MasterController {
     }
 
     @FXML public void handleScanParseAndCheck(Event event ) throws InterruptedException {
+        this.console.clear();
+        try {
+            this.fileController.handleAnalyze(event);
+        } catch (CompilationException e) {
+            this.console.writeLine(e.toString() + "\n", "ERROR");
 
+            return;
+        }
+
+        List<Error> scanningErrors = fileController.getErrors();
+
+        if (scanningErrors != null) {
+
+            errorHelper(scanningErrors);
+        }
+        else{
+            this.console.writeLine("Parse of file was successful.", "CONS");
+
+        }
     }
     /**
      * Scans the file of the current tab for tokens
