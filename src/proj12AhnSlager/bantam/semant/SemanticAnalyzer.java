@@ -266,6 +266,7 @@ public class SemanticAnalyzer
                 parseComplete = true;
             }
             catch(CompilationException e){
+                System.out.println("In File: " + args[i] + "Found errors: ");
                 //TODO add in error reporting w errorHandler
                 parseComplete = false;
             }

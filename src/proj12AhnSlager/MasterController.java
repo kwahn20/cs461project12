@@ -238,73 +238,7 @@ public class MasterController {
      * @param event
      * @throws InterruptedException
      */
-
-    @FXML public void handleMainCheck(Event event) throws InterruptedException {
-        Boolean hasMain;
-        this.console.clear();
-        try {
-             hasMain = this.fileController.handleMainCheck(event);
-        } catch (CompilationException e) {
-            this.console.writeLine(e.toString() + "\n", "ERROR");
-            return;
-        }
-
-        if(hasMain){
-            this.console.writeLine("This file has a Main class and a main method.","CONS");
-        }
-        else{
-            this.console.writeLine("This file does not have a Main class or a main method.", "CONS");
-
-        }
-
-
-    }
-
-
-    /**
-     * Scans and parses the file of the current tab
-     * and prints out the string constants
-     * @param event
-     * @throws InterruptedException
-     */
-
-    @FXML public void handleStrConstCheck(Event event) throws InterruptedException {
-        Map<String,String> stringConstants;
-        this.console.clear();
-        try {
-            stringConstants = this.fileController.handleStrConstCheck(event);
-        } catch (CompilationException e) {
-            this.console.writeLine(e.toString() + "\n", "ERROR");
-            return;
-        }
-
-        this.console.writeLine("These are the string constants: \n"+stringConstants.toString(), "CONS");
-    }
-
-    /**
-     * Scans and parses the file of the current tab
-     * and writes to console number of local variables
-     * in every method
-     * @param event
-     * @throws InterruptedException
-     */
-
-    @FXML public void handleNumLocVarCheck(Event event) throws InterruptedException {
-        Map<String,Integer> localVar;
-        this.console.clear();
-        try {
-              localVar =  this.fileController.handleNumLocVarCheck(event);
-        } catch (CompilationException e) {
-            this.console.writeLine(e.toString() + "\n", "ERROR");
-            return;
-        }
-
-        this.console.writeLine("These are the number of variables in each method: \n", "CONS");
-        this.console.writeLine(localVar.toString(), "CONS");
-    }
-
-
-
+    
     /**
      * Handles the find and replace button action.
      * Opens a find and replace popup window.
