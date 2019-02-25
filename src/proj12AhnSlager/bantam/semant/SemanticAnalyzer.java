@@ -122,6 +122,7 @@ public class SemanticAnalyzer
         this.program = program;
         this.classMap.clear();
 
+        // step 1: add built-in classes in classMap
         addBuiltins();
 
         // step 2: add user-defined classes to classMap
@@ -130,12 +131,14 @@ public class SemanticAnalyzer
         // step 3: builds the environment
         buildClassEnvironments();
 
+        // step 4: check that the Main class and main method are declared properly
         MainMainVisitor mainVisitor = new MainMainVisitor();
         if(!mainVisitor.hasMain(program)){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     "The main method has not been properly declared");
         }
 
+        //step 5: type checks the entire program
         for(String key: classMap.keySet()) {
             if(builtInNames.contains(key)) {
                 TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.program);
