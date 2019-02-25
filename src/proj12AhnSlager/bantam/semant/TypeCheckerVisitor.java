@@ -17,18 +17,18 @@ public class TypeCheckerVisitor extends Visitor
 
     private Hashtable<String, ClassTreeNode> classMap;
 
-    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, ClassTreeNode currentClass, Program program){
+    public TypeCheckerVisitor(Hashtable<String, ClassTreeNode> classMap, ErrorHandler errorHandler, Program program){
         this.classMap = classMap;
-        this.currentClass = currentClass;
         this.errorHandler = errorHandler;
         this.currentSymbolTable = null;
         this.program = program;
 
     }
 
-    public Object beginTypeChecking(){
-        this.program.accept(this);
-        return null;
+    public void beginTypeChecking(ClassTreeNode currentClass){
+        this.currentClass = currentClass;
+        this.currentSymbolTable = this.currentClass.getVarSymbolTable();
+        this.currentClass.getASTNode().accept(this);
     }
 
     /**
@@ -43,15 +43,6 @@ public class TypeCheckerVisitor extends Visitor
 
     public boolean isClassType(String node){
         return  currentClass.getClassMap().containsKey(node) || node.equals("boolean") || node.equals("int") || node.equals("String");
-    }
-
-    public Object visit(Class_ node){
-        currentClass = this.classMap.get(node.getName());
-        currentClass.setParent(classMap.get(node.getParent()));
-
-        currentSymbolTable = currentClass.getVarSymbolTable();
-        node.getMemberList().forEach(m->m.accept(this));
-        return null;
     }
 
     /**
@@ -179,11 +170,24 @@ public class TypeCheckerVisitor extends Visitor
         node.getInitExpr().accept(this);
         node.getPredExpr().accept(this);
         node.getUpdateExpr().accept(this);
+        if(!node.getInitExpr().getExprType().equals("int")){
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    currentClass.getASTNode().getFilename(), node.getLineNum(),
+                    "The type of the initialization is " + node.getPredExpr().getExprType()
+                            + " which is not int.");
+        }
         if(!node.getPredExpr().getExprType().equals("boolean")){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
                     currentClass.getASTNode().getFilename(), node.getLineNum(),
                     "The type of the predicate is " + node.getPredExpr().getExprType()
                             + " which is not boolean.");
+        }
+
+        if(!node.getUpdateExpr().getExprType().equals("boolean")){
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    currentClass.getASTNode().getFilename(), node.getLineNum(),
+                    "The type of the update is " + node.getPredExpr().getExprType()
+                            + " which is not int.");
         }
         currentSymbolTable.enterScope();
         node.getBodyStmt().accept(this);
@@ -402,7 +406,9 @@ public class TypeCheckerVisitor extends Visitor
      * @return null
      */
     public Object visit(ExprStmt node){
-        node.getExpr().accept(this);
+        if(node.getExpr() != null) {
+            node.getExpr().accept(this);
+        }
         return null;
     }
 
@@ -541,6 +547,14 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    public Object visit(VarExpr node){
+        return null;
+    }
+
+    public Object visit(CastExpr node){
+        return null;
+    }
+
     public Object visit(InstanceofExpr node){
         return null;
     }
@@ -550,10 +564,30 @@ public class TypeCheckerVisitor extends Visitor
     }
 
     public Object visit(DispatchExpr node){
+        Expr dispatchReferenceExpression = node.getRefExpr();
+        dispatchReferenceExpression.accept(this);
+
+        Method currentMethod = (Method) currentClass.getMethodSymbolTable().lookup(node.getMethodName());
+        if(node.getActualList().getSize() == currentMethod.getFormalList().getSize()){
+            for(int i = 0; i < node.getActualList().getSize(); i++){
+                Formal actualList = (Formal) node.getActualList().get(i);
+                Formal formalList = (Formal) currentMethod.getFormalList().get(i);
+                if(!actualList.getType().equals(formalList.getType()));
+                    errorHandler.register(Error.Kind.SEMANT_ERROR,
+                        currentClass.getASTNode().getFilename(), node.getLineNum(),
+                        "Parameter type does not match expected parameter type");
+            }
+        }
+
         return null;
     }
 
     public Object visit(AssignExpr node){
+        if(currentSymbolTable.lookup(node.getName())==null){
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    currentClass.getASTNode().getFilename(), node.getLineNum(),
+                    "The variable " + node.getName() + " has not been defined");
+        }
         return null;
     }
 

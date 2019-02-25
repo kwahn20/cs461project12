@@ -35,6 +35,7 @@ import proj12AhnSlager.bantam.util.*;
 import proj12AhnSlager.bantam.util.Error;
 
 import java.lang.reflect.Type;
+import java.security.Key;
 import java.util.*;
 
 /**
@@ -57,6 +58,12 @@ public class SemanticAnalyzer
      */
     public static final Set<String> reservedIdentifiers = new HashSet<>(Arrays.asList(
             "null", "this", "super", "void", "int", "boolean"));
+
+    /**
+     * Reserved words that represent built in classes
+     */
+    public static final Set<String> builtInNames = new HashSet<>(Arrays.asList(
+            "Object", "String", "TextIO", "Sys"));
 
     private static String curFilename;
 
@@ -87,19 +94,12 @@ public class SemanticAnalyzer
     private final int MAX_NUM_FIELDS = 1500;
 
     /**
-     * Controls list of nodes that have been visited to confirm that cyclic dependencies do not exist
-     */
-    private HashSet<String> dependenciesSet;
-
-
-    /**
      * SemanticAnalyzer constructor
      *
      * @param errorHandler the ErrorHandler to use for reporting errors
      */
     public SemanticAnalyzer(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
-        this.dependenciesSet = new HashSet<>();
     }
 
     /**
@@ -136,8 +136,12 @@ public class SemanticAnalyzer
                     "The main method has not been properly declared");
         }
 
-        TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.root, this.program);
-        typeCheckerVisitor.beginTypeChecking();
+        for(String key: classMap.keySet()) {
+            if(builtInNames.contains(key)) {
+                TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.program);
+                typeCheckerVisitor.beginTypeChecking(classMap.get(key));
+            }
+        }
 
         return root;
     }
