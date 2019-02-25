@@ -139,6 +139,7 @@ public class SemanticAnalyzer
         }
 
         //step 5: type checks the entire program
+        //loops through all the classes and determines whether the types are all correct
         for(String key: classMap.keySet()) {
             if(builtInNames.contains(key)) {
                 TypeCheckerVisitor typeCheckerVisitor = new TypeCheckerVisitor(this.classMap, this.errorHandler, this.program);
@@ -220,6 +221,7 @@ public class SemanticAnalyzer
     }
 
     /**
+     * function for creating the class tree nodes
      *
      */
     public void addUserClasses() {
@@ -228,6 +230,7 @@ public class SemanticAnalyzer
     }
 
     /**
+     * function for creating the class environments
      *
      */
     public void buildClassEnvironments() {
@@ -258,10 +261,10 @@ public class SemanticAnalyzer
             errorHandler = new ErrorHandler();
             checkErrorHandler = new ErrorHandler();
             parser = new Parser(errorHandler);
-            ast = null;
+            Program program = null;
             semAnalyzer = new SemanticAnalyzer(checkErrorHandler);
             try {
-                ast = parser.parse(args[i]);
+                program = parser.parse(args[i]);
                 System.out.println("Parsing Successful");
                 parseComplete = true;
             }
@@ -271,13 +274,15 @@ public class SemanticAnalyzer
                 parseComplete = false;
             }
 
-            if (parseComplete){
+            if (parseComplete && program != null){
                 try{
-                    semAnalyzer.analyze(ast);
+                    semAnalyzer.analyze(program);
                     System.out.println("Analyzing Successful");
                 }
                 catch (RuntimeException e){
-                    //TODO add in error reporting w checkerErrorHandler
+                    List <Error> checkErrorList = semAnalyzer.getErrorHandler().getErrorList();
+                    for (Error err : checkErrorList)
+                        System.out.println(err.toString() + "\n");
                 }
             }
         }

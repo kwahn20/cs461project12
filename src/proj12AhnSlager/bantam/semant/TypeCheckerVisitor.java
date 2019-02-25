@@ -549,6 +549,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit a variable expression
+     *
+     * @param node the variable expression node
+     * @return
+     */
     public Object visit(VarExpr node){
         Expr varReferenceExpression = node.getRef();
         varReferenceExpression.accept(this);
@@ -562,6 +568,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit a cast expression
+     *
+     * @param node the cast expression node
+     * @return
+     */
     public Object visit(CastExpr node){
         Expr castReferenceExpression = node.getExpr();
         castReferenceExpression.accept(this);
@@ -572,6 +584,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit an instanceOf expression
+     *
+     * @param node the instanceof expression node
+     * @return
+     */
     public Object visit(InstanceofExpr node){
         Expr instanceOfReferenceExpression = node.getExpr();
         instanceOfReferenceExpression.accept(this);
@@ -581,6 +599,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit a new array expression
+     *
+     * @param node the new array expression node
+     * @return
+     */
     public Object visit(NewArrayExpr node){
         Expr arraySize = node.getSize();
         arraySize.accept(this);
@@ -597,6 +621,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit a dispatch expression
+     *
+     * @param node the dispatch expression node
+     * @return
+     */
     public Object visit(DispatchExpr node){
         Expr dispatchReferenceExpression = node.getRefExpr();
         dispatchReferenceExpression.accept(this);
@@ -616,6 +646,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit an assignment expression
+     *
+     * @param node the assignment expression node
+     * @return
+     */
     public Object visit(AssignExpr node){
         if(currentSymbolTable.lookup(node.getName())==null){
             errorHandler.register(Error.Kind.SEMANT_ERROR,
@@ -625,6 +661,12 @@ public class TypeCheckerVisitor extends Visitor
         return null;
     }
 
+    /**
+     * Visit an array assignment expression
+     *
+     * @param node the array assignment expression node
+     * @return
+     */
     public Object visit(ArrayAssignExpr node){
         node.getExpr().accept(this);
         node.getIndex().accept(this);
