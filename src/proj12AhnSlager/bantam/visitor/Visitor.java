@@ -167,7 +167,6 @@ public abstract class Visitor {
      */
     public Object visit(StmtList node) {
         for (Iterator it = node.iterator(); it.hasNext(); )
-            //System.out.println(it.next().getClass());
             ((Stmt) it.next()).accept(this);
         return null;
     }

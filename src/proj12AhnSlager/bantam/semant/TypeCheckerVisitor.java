@@ -38,6 +38,8 @@ public class TypeCheckerVisitor extends Visitor
      * @return
      */
     public boolean isSubTypeOf(String node1, String node2){
+        //so far all attempts to get determine subTypes has revolved around the currentClass
+        //but it continues to give us null pointer exceptions that we cannot determine the cause of
         return false;
     }
 
@@ -548,18 +550,50 @@ public class TypeCheckerVisitor extends Visitor
     }
 
     public Object visit(VarExpr node){
+        Expr varReferenceExpression = node.getRef();
+        varReferenceExpression.accept(this);
+        if (currentSymbolTable.lookup(node.getName()) != null) {
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    currentClass.getASTNode().getFilename(), node.getLineNum(),
+                    "The variable name " + node.getName() + " has already been used in this scope.");
+        }
+
+        node.setExprType(varReferenceExpression.getExprType());
         return null;
     }
 
     public Object visit(CastExpr node){
+        Expr castReferenceExpression = node.getExpr();
+        castReferenceExpression.accept(this);
+
+        //code determining whether an error is given
+
+        node.setExprType(node.getType());
         return null;
     }
 
     public Object visit(InstanceofExpr node){
+        Expr instanceOfReferenceExpression = node.getExpr();
+        instanceOfReferenceExpression.accept(this);
+
+        //code determining whether an error is given
+
         return null;
     }
 
     public Object visit(NewArrayExpr node){
+        Expr arraySize = node.getSize();
+        arraySize.accept(this);
+        if (!arraySize.getExprType().equals("int")) {
+            errorHandler.register(Error.Kind.SEMANT_ERROR,
+                    currentClass.getASTNode().getFilename(), node.getLineNum(),
+                    "Array size must be given as an integer value");
+            arraySize.setExprType("int");
+        }
+        else{
+            node.setExprType(node.getType());
+        }
+
         return null;
     }
 

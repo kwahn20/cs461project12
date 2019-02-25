@@ -120,8 +120,6 @@ public class Method extends Member {
      * @see proj12AhnSlager.bantam.visitor.Visitor
      */
     public Object accept(Visitor v) {
-        System.out.println(stmtList.getSize());
-        System.out.println(name);
         return v.visit(this);
     }
 }
