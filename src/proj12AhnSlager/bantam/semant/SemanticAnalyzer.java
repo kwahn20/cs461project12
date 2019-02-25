@@ -269,12 +269,11 @@ public class SemanticAnalyzer
                 parseComplete = true;
             }
             catch(CompilationException e){
-                System.out.println("In File: " + args[i] + "Found errors: ");
-                //TODO add in error reporting w errorHandler
+                System.out.println("\nIn File: " + args[i] + " Found errors: \n");
                 parseComplete = false;
             }
 
-            if (parseComplete && program != null){
+            if (parseComplete){
                 try{
                     semAnalyzer.analyze(program);
                     System.out.println("Analyzing Successful");
