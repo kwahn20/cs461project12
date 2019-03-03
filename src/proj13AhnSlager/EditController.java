@@ -125,8 +125,8 @@ public class EditController {
     }
 
     public void handleRefactor(Program parseRoot){
-        Refactor refactor = new Refactor(this);
-        refactor.initialize(parseRoot);
+        Refactor refactor = new Refactor(this,parseRoot);
+        refactor.initialize();
     }
     /**
      * if a single "{", "}", "[", "]", "(", ")" is highlighted, this will attempt to find
