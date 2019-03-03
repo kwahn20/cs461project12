@@ -19,6 +19,8 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.NavigationActions.SelectionPolicy;
 import org.fxmisc.richtext.Selection;
+import proj12AhnSlager.bantam.ast.Program;
+
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 
@@ -122,6 +124,10 @@ public class EditController {
         findAndReplace.setupWidget();
     }
 
+    public void handleRefactor(Program parseRoot){
+        Refactor refactor = new Refactor(this);
+        refactor.initialize(parseRoot);
+    }
     /**
      * if a single "{", "}", "[", "]", "(", ")" is highlighted, this will attempt to find
      * the matching opening or closing character and if successful, will highlight the

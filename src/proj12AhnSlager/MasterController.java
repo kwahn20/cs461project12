@@ -26,6 +26,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.util.List;
 
+import proj12AhnSlager.bantam.ast.Program;
 import proj12AhnSlager.bantam.util.CompilationException;
 import proj12AhnSlager.bantam.util.Error;
 import proj12AhnSlager.bantam.util.ErrorHandler;
@@ -64,6 +65,7 @@ public class MasterController {
     @FXML private Menu prefMenu;
     @FXML private Button scanButton;
     @FXML private Button scanAndParseButton;
+    @FXML private Button refactorButton;
     @FXML private Button checkMainBtn;
     @FXML private Button checkStringBtn;
     @FXML private Button checkLocalVarBtn;
@@ -74,7 +76,9 @@ public class MasterController {
 
     private EditController editController;
     private FileController fileController;
+    private Refactor refactor;
     private ErrorHandler errorHandler;
+    private Program parseRoot;
 
 
     // this line from JianQuanMarcello project 6
@@ -86,6 +90,7 @@ public class MasterController {
         editController = new EditController(javaTabPane, findTextEntry, findPrevBtn, findNextBtn, replaceTextEntry);
         this.fileController = new FileController(vBox,javaTabPane);
         this.errorHandler = new ErrorHandler();
+        this.parseRoot = null;
 
         SimpleListProperty<Tab> listProperty = new SimpleListProperty<Tab> (javaTabPane.getTabs());
         editMenu.disableProperty().bind(listProperty.emptyProperty());
@@ -211,13 +216,14 @@ public class MasterController {
 
         this.console.clear();
         try {
-            this.fileController.handleScanAndParse(event);
+            this.parseRoot = this.fileController.handleScanAndParse(event);
         } catch (CompilationException e) {
             this.console.writeLine(e.toString() + "\n", "ERROR");
             return;
         }
 
         List<Error> scanningAndParsingErrors = fileController.getErrors();
+
 
         if (scanningAndParsingErrors != null) {
 
@@ -227,6 +233,13 @@ public class MasterController {
             this.console.writeLine("Scan and parse of file was successful.", "CONS");
 
         }
+    }
+
+    @FXML public void handleRefactor(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleRefactor(this.parseRoot);
+        }
+
     }
 
     /**
