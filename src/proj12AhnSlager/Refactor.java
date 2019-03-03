@@ -61,19 +61,7 @@ public class Refactor {
         ClassVisitor classVisitor = new ClassVisitor();
         ArrayList<String> names = classVisitor.getClasses(this.parseRoot);
         CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        Stage popupWindow  = new Stage();
-        GridPane layout    = new GridPane();
-        Scene scene        = new Scene(layout);
-
-        ListView listView = new ListView();
-        System.out.println(names);
-        for(int i = 0; i<names.size(); i++){
-            listView.getItems().add(names.get(i));
-        }
-        layout.add(listView,0,1);
-        popupWindow.setScene(scene);
-        popupWindow.showAndWait();
-
+        this.getHelper(names);
     }
 
     public void getMethods(Stage window){
@@ -81,18 +69,7 @@ public class Refactor {
         MethodVisitor methodVisitor = new MethodVisitor();
         ArrayList<String> names = methodVisitor.getMethods(this.parseRoot);
         CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        Stage popupWindow  = new Stage();
-        GridPane layout    = new GridPane();
-        Scene scene        = new Scene(layout);
-
-        ListView listView = new ListView();
-        System.out.println(names);
-        for(int i = 0; i<names.size(); i++){
-            listView.getItems().add(names.get(i));
-        }
-        layout.add(listView,0,1);
-        popupWindow.setScene(scene);
-        popupWindow.showAndWait();
+        this.getHelper(names);
     }
 
     public void getFields(Stage window){
@@ -100,6 +77,10 @@ public class Refactor {
         FieldVisitor fieldVisitor = new FieldVisitor();
         ArrayList<String> names = fieldVisitor.getFields(this.parseRoot);
         CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
+        this.getHelper(names);
+    }
+
+    public void getHelper(ArrayList names){
         Stage popupWindow  = new Stage();
         GridPane layout    = new GridPane();
         Scene scene        = new Scene(layout);
