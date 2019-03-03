@@ -1,7 +1,7 @@
-package proj12AhnSlager.bantam.semant;
+package proj13AhnSlager.bantam.semant;
 
-import proj12AhnSlager.bantam.ast.*;
-import proj12AhnSlager.bantam.visitor.Visitor;
+import proj13AhnSlager.bantam.ast.*;
+import proj13AhnSlager.bantam.visitor.Visitor;
 
 import java.util.ArrayList;
 

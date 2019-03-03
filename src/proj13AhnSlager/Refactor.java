@@ -1,4 +1,4 @@
-package proj12AhnSlager;
+package proj13AhnSlager;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -6,12 +6,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-import proj12AhnSlager.bantam.ast.Program;
-import proj12AhnSlager.bantam.semant.*;
+import proj13AhnSlager.bantam.ast.Program;
+import proj13AhnSlager.bantam.semant.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * @author Kevin Ahn, Kyle Slager
+ * A refactoring class that sets up a window
+ */
 import javafx.scene.control.ListView;
 
 public class Refactor {

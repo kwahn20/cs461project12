@@ -1,10 +1,10 @@
-package proj12AhnSlager.bantam.semant;
+package proj13AhnSlager.bantam.semant;
 
-import proj12AhnSlager.bantam.ast.ASTNode;
-import proj12AhnSlager.bantam.ast.ClassList;
-import proj12AhnSlager.bantam.ast.Class_;
-import proj12AhnSlager.bantam.ast.Program;
-import proj12AhnSlager.bantam.visitor.Visitor;
+import proj13AhnSlager.bantam.ast.ASTNode;
+import proj13AhnSlager.bantam.ast.ClassList;
+import proj13AhnSlager.bantam.ast.Class_;
+import proj13AhnSlager.bantam.ast.Program;
+import proj13AhnSlager.bantam.visitor.Visitor;
 
 import java.util.ArrayList;
 
