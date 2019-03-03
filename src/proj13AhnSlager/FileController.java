@@ -352,9 +352,9 @@ public class FileController {
      * was successful
      * @param event press of the Scan button triggering the handleScan method
      */
-    public void handleScanAndParse (Event event) {
+    public Program handleScanAndParse (Event event) {
 
-        scanOrParseHelper(event, "SCAN_AND_PARSE" );
+        return scanOrParseHelper(event, "SCAN_AND_PARSE" );
 
 
     }
