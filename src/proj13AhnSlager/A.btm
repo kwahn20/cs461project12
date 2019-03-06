@@ -1,7 +1,7 @@
 class Main{
     int x;
 int a;
-    int fieldError = "Not an int"; // testing FieldExpr
+    int fieldError = 4; // testing FieldExpr
 	void main(){
 		a = new int[4];
 	}
