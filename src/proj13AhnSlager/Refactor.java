@@ -255,9 +255,9 @@ public class Refactor {
 
     private void selectNext(ArrayList names, String type) {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);
-        dialog.setTitle("Refactor");
-        dialog.setHeaderText("Welcome to Refactoring Helper");
-        dialog.setContentText("Choose what you would like to refactor:");
+        dialog.setTitle("Jump To");
+        dialog.setHeaderText("Welcome to Jump To");
+        dialog.setContentText("Choose where you would like to jump:");
 
         Optional<String> result = dialog.showAndWait();
 
