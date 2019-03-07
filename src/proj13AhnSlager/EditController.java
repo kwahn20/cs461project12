@@ -124,9 +124,9 @@ public class EditController {
         findAndReplace.setupWidget();
     }
 
-    public void handleRefactor(Program parseRoot){
-        Refactor refactor = new Refactor(this,parseRoot);
-        refactor.initialize();
+    public void handleRefactor(Program parseRoot, String type){
+        Refactor refactor = new Refactor(this, parseRoot);
+        refactor.initialize(type);
     }
     /**
      * if a single "{", "}", "[", "]", "(", ")" is highlighted, this will attempt to find

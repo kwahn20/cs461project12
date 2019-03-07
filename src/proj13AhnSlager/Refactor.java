@@ -8,8 +8,7 @@
 package proj13AhnSlager;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -18,7 +17,8 @@ import proj13AhnSlager.bantam.semant.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import javafx.scene.control.ListView;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Kevin Ahn, Kyle Slager
@@ -36,7 +36,10 @@ public class Refactor {
     private Button classButton;
     private Button methodButton;
     private Button fieldButton;
+    private Button refactorButton;
     private TextField userEntryTextField;
+    private Stage popupWindow;
+    private Stage refactorWindow;
 
 
     /**
@@ -54,85 +57,81 @@ public class Refactor {
      * Creates a set of buttons that will redirect the user to the list of classes, methods,
      * or fields
      */
-    public void initialize(){
-        CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        Stage popupWindow  = new Stage();
-        GridPane layout    = new GridPane();
-        Scene scene        = new Scene(layout);
-
-        textToSearch       = currentCodeArea.getText();
-        classButton        = new Button("Class");
-        methodButton         = new Button("Method");
-        fieldButton   = new Button("Field");
-        userEntryTextField = new TextField();
-
-        layout.add(classButton,0,1);
-        layout.add(methodButton, 0, 2);
-        layout.add(fieldButton, 0, 3);
-
-        classButton.setOnAction(event -> getClasses(popupWindow));
-        methodButton.setOnAction(event -> getMethods(popupWindow));
-        fieldButton.setOnAction(event -> getFields(popupWindow));
-
-        popupWindow.setScene(scene);
-        popupWindow.showAndWait();
+    public void initialize(String type){
+        if(type.equals("class")){
+            getClasses();
+        }
+        else if(type.equals("method")){
+            getMethods();
+        }
+        else{
+            getFields();
+        }
     }
 
     /**
      * method to get the list of classes in the current file, creates a new ClassVisitor
      * to get the list of name and adds them to an arrayList.
-     * @param window the current window
      */
-    public void getClasses(Stage window){
-        window.close();
+    public void getClasses(){
         ClassVisitor classVisitor = new ClassVisitor(); // creates the visitor
         ArrayList<String> names = classVisitor.getClasses(this.parseRoot);
-        CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        this.getHelper(names);
+        this.getHelper(names, "Classes");
     }
 
     /**
      * method to get the list of methods in the current file, creates a new MethodVisitor
      * to get the list of names and adds them to an arrayList.
-     * @param window the current window
      */
-    public void getMethods(Stage window){
-        window.close();
+    public void getMethods(){
         MethodVisitor methodVisitor = new MethodVisitor(); // creates the method visitor
         ArrayList<String> names = methodVisitor.getMethods(this.parseRoot);
-        CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        this.getHelper(names);
+        this.getHelper(names, "Methods");
     }
 
     /**
      * method to get the list of fields in the current file, creates a new FieldVisitor
      * to get the list of names and adds them to an arrayList.
-     * @param window the current window
      */
-    public void getFields(Stage window){
-        window.close();
+    public void getFields(){
         FieldVisitor fieldVisitor = new FieldVisitor();
         ArrayList<String> names = fieldVisitor.getFields(this.parseRoot);
-        CodeArea currentCodeArea = this.editController.getCurJavaCodeArea();
-        this.getHelper(names);
+        this.getHelper(names, "Fields");
     }
 
-    public void getHelper(ArrayList names){
-        Stage popupWindow  = new Stage();
-        GridPane layout    = new GridPane();
-        Scene scene        = new Scene(layout);
+    public void getHelper(ArrayList names, String type) {
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);
+        dialog.setTitle("Refactor");
+        dialog.setHeaderText("Welcome to Refactoring Helper");
+        dialog.setContentText("Choose what you would like to refactor:");
 
-        ListView listView = new ListView();
-        System.out.println(names);
-        for(int i = 0; i<names.size(); i++){
-            listView.getItems().add(names.get(i));
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            getNewName(result.get());
         }
-        layout.add(listView,0,1);
-        popupWindow.setScene(scene);
-        popupWindow.showAndWait();
     }
 
-    public void refactorAll(){
+    public void getNewName(String oldName){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Choose New Name");
+        dialog.setHeaderText("Welcome to Refactoring Helper");
+        dialog.setContentText("Choose a new name");
+
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent()){
+            String newName = result.get();
+            refactorAll(oldName, newName);
+        }
+    }
+
+    public void refactorAll(String oldName, String newName){
+
+        String source = editController.getCurJavaCodeArea().getText();
+
+        String newText     = source.replace(oldName, newName);
+
+        editController.handleSelectAll();
+        editController.getCurJavaCodeArea().replaceSelection(newText);
 
     }
 }

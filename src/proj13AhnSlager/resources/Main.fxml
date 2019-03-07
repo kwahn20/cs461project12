@@ -81,6 +81,11 @@
             <MenuItem fx:id="hallowThemeItem" mnemonicParsing="false" onAction="#handleHallowThemeMode"
                       text="HallowTheme"/>
         </Menu>
+        <Menu fx:id="refactorMenu" mnemonicParsing="false" text="Refactor">
+            <MenuItem fx:id="classRefactor" mnemonicParsing="false" onAction="#handleRefactorClass" text="Class" disable="false"/>
+            <MenuItem fx:id="methodRefactor" mnemonicParsing="false" onAction="#handleRefactorMethod" text="Method" disable="false"/>
+            <MenuItem fx:id="fieldRefactor" mnemonicParsing="false" onAction="#handleRefactorField" text="Field" disable="false"/>
+        </Menu>
         <Menu mnemonicParsing="false" text = "Help">
             <MenuItem mnemonicParsing="false" onAction="#handleOpenJavaTutorial" text = "Java Tutorial"/>
         </Menu>
@@ -90,7 +95,6 @@
     <ToolBar>
         <Button fx:id="scanButton" onAction="#handleScan" text="Scan"/>
         <Button fx:id="scanAndParseButton" onAction="#handleScanAndParse" text="Scan And Parse"/>
-        <Button fx:id="refactorButton" onAction="#handleRefactor" text="Refactor"/>
         <TextField fx:id="findTextEntry" promptText="Find"/>
         <Button fx:id="findButton" onAction="#handleFindText" text="Find"/>
         <Button fx:id="findPrevBtn" onAction="#handleHighlightPrevMatch" text="Previous"/>

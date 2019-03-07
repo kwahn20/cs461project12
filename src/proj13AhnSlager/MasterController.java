@@ -170,7 +170,6 @@ public class MasterController {
         List<Error> scanningErrors = fileController.getAnalysisErrors();
 
         if (scanningErrors != null) {
-
             errorHelper(scanningErrors);
         }
         else{
@@ -235,11 +234,22 @@ public class MasterController {
         }
     }
 
-    @FXML public void handleRefactor(Event event){
+    @FXML public void handleRefactorClass(Event event){
         if(this.parseRoot != null){
-            this.editController.handleRefactor(this.parseRoot);
+            this.editController.handleRefactor(this.parseRoot, "class");
         }
+    }
 
+    @FXML public void handleRefactorMethod(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleRefactor(this.parseRoot, "method");
+        }
+    }
+
+    @FXML public void handleRefactorField(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleRefactor(this.parseRoot, "field");
+        }
     }
 
     /**
