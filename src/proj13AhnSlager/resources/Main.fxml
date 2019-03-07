@@ -86,6 +86,11 @@
             <MenuItem fx:id="methodRefactor" mnemonicParsing="false" onAction="#handleRefactorMethod" text="Method" disable="false"/>
             <MenuItem fx:id="fieldRefactor" mnemonicParsing="false" onAction="#handleRefactorField" text="Field" disable="false"/>
         </Menu>
+        <Menu fx:id="jumpToMenu" mnemonicParsing="false" text="Refactor">
+            <MenuItem fx:id="classJumpTo" mnemonicParsing="false" onAction="#handleJumpToClass" text="Class" disable="false"/>
+            <MenuItem fx:id="methodJumpTo" mnemonicParsing="false" onAction="#handleJumpToMethod" text="Method" disable="false"/>
+            <MenuItem fx:id="fieldJumpTo" mnemonicParsing="false" onAction="#handleJumpToField" text="Field" disable="false"/>
+        </Menu>
         <Menu mnemonicParsing="false" text = "Help">
             <MenuItem mnemonicParsing="false" onAction="#handleOpenJavaTutorial" text = "Java Tutorial"/>
         </Menu>
