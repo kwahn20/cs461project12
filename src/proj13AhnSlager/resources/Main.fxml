@@ -91,6 +91,11 @@
             <MenuItem fx:id="methodJumpTo" mnemonicParsing="false" onAction="#handleJumpToMethod" text="Method" disable="false"/>
             <MenuItem fx:id="fieldJumpTo" mnemonicParsing="false" onAction="#handleJumpToField" text="Field" disable="false"/>
         </Menu>
+        <Menu fx:id="anDepMenu" mnemonicParsing="false" text="Analyze Dependencies">
+            <MenuItem fx:id="classAnDep" mnemonicParsing="false" onAction="#handleAnDepClass" text="Class" disable="false"/>
+            <MenuItem fx:id="methodAnDep" mnemonicParsing="false" onAction="#handleAnDepMethod" text="Method" disable="false"/>
+            <MenuItem fx:id="fieldAnDep" mnemonicParsing="false" onAction="#handleAnDepField" text="Field" disable="false"/>
+        </Menu>
         <Menu mnemonicParsing="false" text = "Help">
             <MenuItem mnemonicParsing="false" onAction="#handleOpenJavaTutorial" text = "Java Tutorial"/>
         </Menu>

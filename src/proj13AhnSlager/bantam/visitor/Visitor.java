@@ -495,6 +495,7 @@ public abstract class Visitor {
      */
     public Object visit(BinaryArithPlusExpr node) {
         node.getLeftExpr().accept(this);
+        System.out.println(node.getLeftExpr().getExprType());
         node.getRightExpr().accept(this);
         return null;
     }

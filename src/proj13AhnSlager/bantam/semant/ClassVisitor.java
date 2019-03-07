@@ -23,13 +23,17 @@ import java.util.ArrayList;
 public class ClassVisitor extends Visitor {
 
     public ArrayList classList;
+    public String option;
+    public String input;
 
     /**
      * method that creates a new class list and calls the parseRoots accepts method
      * @param parseRoot
      * @return an ArrayList of class names
      */
-    public ArrayList<String> getClasses(Program parseRoot){
+    public ArrayList<String> getClasses(Program parseRoot, String option, String input){
+        this.input = input;
+        this.option = option;
         classList = new ArrayList();
         parseRoot.accept(this);
         return classList;
@@ -42,9 +46,14 @@ public class ClassVisitor extends Visitor {
      */
     @Override
     public Object visit(Class_ node){
-        System.out.println(node.getName()); // used for testing
+        if(node.getName().equals(this.input)){
+            node.setName(this.option);
+        }
         classList.add(node.getName()); // adds it to the class list
         node.getMemberList().accept(this);
+        if(!this.option.equals("null")){
+            node.setName(this.option);
+        }
         return null;
     }
 }

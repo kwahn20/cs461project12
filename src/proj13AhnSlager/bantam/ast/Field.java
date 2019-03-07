@@ -85,6 +85,10 @@ public class Field extends Member {
         return name;
     }
 
+    public void setName(String option){
+        this.name = option;
+    }
+
     /**
      * Get the initialization expression of the field
      *

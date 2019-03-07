@@ -20,6 +20,8 @@ import java.util.ArrayList;
 public class MethodVisitor extends Visitor {
 
     public ArrayList methodList;
+    public String option;
+    public String input;
 
 
     /**
@@ -27,7 +29,9 @@ public class MethodVisitor extends Visitor {
      * @param parseRoot
      * @return an ArrayList of method names
      */
-    public ArrayList<String> getMethods(Program parseRoot){
+    public ArrayList<String> getMethods(Program parseRoot, String option, String input){
+        this.input = input;
+        this.option = option;
         methodList = new ArrayList();
         parseRoot.accept(this);
         return methodList;
@@ -39,7 +43,9 @@ public class MethodVisitor extends Visitor {
      * @return
      */
     public Object visit(Method node){
-        System.out.println(node.getName());
+        if(node.getName().equals(this.input)){
+            node.setName(this.option);
+        }
         methodList.add(node.getName());
         node.getFormalList().accept(this);
         node.getStmtList().accept(this);

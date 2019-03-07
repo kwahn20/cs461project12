@@ -94,6 +94,10 @@ public class Method extends Member {
         return name;
     }
 
+    public void setName(String option){
+        this.name = option;
+    }
+
     /**
      * Get list of formal parameters
      *

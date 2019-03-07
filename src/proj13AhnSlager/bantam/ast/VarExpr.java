@@ -93,7 +93,6 @@ public class VarExpr extends Expr {
      * @see proj13AhnSlager.bantam.visitor.Visitor
      */
     public Object accept(Visitor v) {
-        System.out.println(ref);
         return v.visit(this);
     }
 }

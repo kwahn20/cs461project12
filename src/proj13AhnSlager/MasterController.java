@@ -269,6 +269,24 @@ public class MasterController {
             this.editController.handleJumpTo(this.parseRoot, "field");
         }
     }
+
+    @FXML public void handleAnDepClass(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleAnDep(this.parseRoot, "class");
+        }
+    }
+
+    @FXML public void handleAnDepMethod(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleAnDep(this.parseRoot, "method");
+        }
+    }
+
+    @FXML public void handleAnDepField(Event event){
+        if(this.parseRoot != null){
+            this.editController.handleAnDep(this.parseRoot, "field");
+        }
+    }
     /**
      * Scans and parses the file of the current tab and checks to see if there is a
      * Main class and a main method

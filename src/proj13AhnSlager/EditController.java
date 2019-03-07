@@ -133,6 +133,11 @@ public class EditController {
         Refactor refactor = new Refactor(this, parseRoot);
         refactor.initializeJumpTo(type);
     }
+
+    public void handleAnDep(Program parseRoot, String type){
+        Refactor refactor = new Refactor(this, parseRoot);
+        refactor.initializeDependencies(type);
+    }
     /**
      * if a single "{", "}", "[", "]", "(", ")" is highlighted, this will attempt to find
      * the matching opening or closing character and if successful, will highlight the

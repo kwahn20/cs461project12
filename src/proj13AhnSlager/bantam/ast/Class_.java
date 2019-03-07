@@ -93,6 +93,10 @@ public class Class_ extends ASTNode {
         return name;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
     /**
      * Get the name of the parent of this class
      *

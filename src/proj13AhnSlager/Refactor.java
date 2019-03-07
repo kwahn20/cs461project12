@@ -95,15 +95,30 @@ public class Refactor {
         }
     }
 
+    public void initializeDependencies(String type){
+        if(type.equals("class")){
+            getClasses("AnDep");
+        }
+        else if(type.equals("method")){
+            getMethods("AnDep");
+        }
+        else{
+            getFields("AnDep");
+        }
+    }
+
     /**
      * method to get the list of classes in the current file, creates a new ClassVisitor
      * to get the list of name and adds them to an arrayList.
      */
     public void getClasses(String type){
         ClassVisitor classVisitor = new ClassVisitor(); // creates the visitor
-        ArrayList<String> names = classVisitor.getClasses(this.parseRoot);
+        ArrayList<String> names = classVisitor.getClasses(this.parseRoot, "null", "null");
         if(type.equals("Refactor")) {
             this.getHelper(names, "Classes");
+        }
+        else if(type.equals("AnDep")){
+            this.analyzeDependencies(names, "Classes");
         }
         else {
             this.selectNext(names, "Classes");
@@ -116,9 +131,12 @@ public class Refactor {
      */
     public void getMethods(String type){
         MethodVisitor methodVisitor = new MethodVisitor(); // creates the method visitor
-        ArrayList<String> names = methodVisitor.getMethods(this.parseRoot);
+        ArrayList<String> names = methodVisitor.getMethods(this.parseRoot,"null", "null");
         if(type.equals("Refactor")) {
             this.getHelper(names, "Methods");
+        }
+        else if(type.equals("AnDep")){
+            this.analyzeDependencies(names, "Methods");
         }
         else {
             this.selectNext(names, "Methods");
@@ -131,9 +149,12 @@ public class Refactor {
      */
     public void getFields(String type){
         FieldVisitor fieldVisitor = new FieldVisitor();
-        ArrayList<String> names = fieldVisitor.getFields(this.parseRoot);
+        ArrayList<String> names = fieldVisitor.getFields(this.parseRoot, "null", "null");
         if(type.equals("Refactor")) {
             this.getHelper(names, "Fields");
+        }
+        else if(type.equals("AnDep")){
+            this.analyzeDependencies(names, "Fields");
         }
         else {
             this.selectNext(names, "Fields");
@@ -148,11 +169,11 @@ public class Refactor {
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            getNewName(result.get());
+            getNewName(result.get(), type);
         }
     }
 
-    public void getNewName(String oldName){
+    public void getNewName(String oldName, String type){
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Choose New Name");
         dialog.setHeaderText("Welcome to Refactoring Helper");
@@ -161,17 +182,29 @@ public class Refactor {
         Optional<String> result = dialog.showAndWait();
         if(result.isPresent()){
             String newName = result.get();
-            refactorAll(oldName, newName);
+            refactorAll(oldName, newName, type);
         }
     }
 
-    public void refactorAll(String oldName, String newName){
+    public void refactorAll(String oldName, String newName, String type){
 
         String source = editController.getCurJavaCodeArea().getText();
         String newText     = source.replace(oldName, newName);
 
         editController.handleSelectAll();
         editController.getCurJavaCodeArea().replaceSelection(newText);
+        if(type.equals("Classes")){
+            ClassVisitor classVisitor = new ClassVisitor();
+            classVisitor.getClasses(this.parseRoot, newName, oldName);
+        }
+        else if(type.equals("Methods")){
+            MethodVisitor methodVisitor = new MethodVisitor();
+            methodVisitor.getMethods(this.parseRoot, newName, oldName);
+        }
+        else{
+            FieldVisitor fieldVisitor = new FieldVisitor();
+            fieldVisitor.getFields(this.parseRoot, newName, oldName);
+        }
     }
 
     /**
@@ -281,5 +314,26 @@ public class Refactor {
             currentCodeArea.moveTo(range[0]);
             currentCodeArea.moveTo(range[1], NavigationActions.SelectionPolicy.EXTEND);
         }
+    }
+
+    private void analyzeDependencies(ArrayList names, String type){
+        ArrayList dependenciesList = new ArrayList();
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);
+        dialog.setTitle("Analyze Dependencies");
+        dialog.setHeaderText("Welcome to Analyze Dependencies");
+        dialog.setContentText("Choose where you would like to jump");
+        DependencyVisitor dependencyVisitor = new DependencyVisitor();
+        Optional<String> result = dialog.showAndWait();
+        if(result.isPresent()){
+            String choice = result.get();
+            dependenciesList = dependencyVisitor.initialize(this.parseRoot, choice);
+        }
+        for(Object a: dependenciesList){
+            System.out.println(a.toString());
+        }
+
+
+
+
     }
 }

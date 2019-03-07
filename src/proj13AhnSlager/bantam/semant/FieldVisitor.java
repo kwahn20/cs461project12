@@ -20,13 +20,17 @@ import java.util.ArrayList;
 public class FieldVisitor extends Visitor {
 
     public ArrayList fieldList;
+    public String option;
+    public String input;
 
     /**
      * method that creates a new field list and calls the parseRoots accepts method
      * @param parseRoot
      * @return an ArrayList of field names
      */
-    public ArrayList<String> getFields(Program parseRoot){
+    public ArrayList<String> getFields(Program parseRoot, String option, String input){
+        this.input = input;
+        this.option = option;
         fieldList = new ArrayList();
         parseRoot.accept(this);
         return fieldList;
@@ -38,7 +42,9 @@ public class FieldVisitor extends Visitor {
      * @return
      */
     public Object visit(Field node){
-        System.out.println(node.getName());
+        if(node.getName().equals(this.input)){
+            node.setName(this.option);
+        }
         fieldList.add(node.getName());
         if (node.getInit() != null) {
             node.getInit().accept(this);
