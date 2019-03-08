@@ -124,16 +124,32 @@ public class EditController {
         findAndReplace.setupWidget();
     }
 
+
+    /**
+     * handles the refactoring
+     * @param parseRoot ast
+     * @param type class, method, field
+     */
     public void handleRefactor(Program parseRoot, String type){
         Refactor refactor = new Refactor(this, parseRoot);
         refactor.initializeRefactor(type);
     }
 
+    /**
+     * handles the refactoring
+     * @param parseRoot ast
+     * @param type class, method, field
+     */
     public void handleJumpTo(Program parseRoot, String type){
         Refactor refactor = new Refactor(this, parseRoot);
         refactor.initializeJumpTo(type);
     }
 
+    /**
+     * handles the analyzing dependencies
+     * @param parseRoot ast
+     * @param type class, method, field
+     */
     public void handleAnDep(Program parseRoot, String type){
         Refactor refactor = new Refactor(this, parseRoot);
         refactor.initializeDependencies(type);

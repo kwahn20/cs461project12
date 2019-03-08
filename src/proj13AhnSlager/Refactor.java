@@ -31,18 +31,34 @@ public class Refactor {
     private Iterator<int[]> indices = new ArrayList<int[]>().iterator();
     private String target, textToSearch;
 
+    /**
+     *
+     * @return the target
+     */
     public String getTarget() {
         return this.target;
     }
 
+    /**
+     * sets the target
+     * @param target
+     */
     public void setTarget(String target) {
         this.target = target;
     }
 
+    /**
+     *
+     * @return the text to search
+     */
     public String getTextToSearch() {
         return this.textToSearch;
     }
 
+    /**
+     * sets the text to search
+     * @param text
+     */
     public void setTextToSearch(String text) {
         this.textToSearch = text;
     }
@@ -83,6 +99,10 @@ public class Refactor {
         }
     }
 
+    /**
+     * intializes the jumpTo based on what type is passed into the method
+     * @param type the type being jumped to
+     */
     public void initializeJumpTo(String type){
         if(type.equals("class")){
             getClasses("JumpTo");
@@ -95,6 +115,10 @@ public class Refactor {
         }
     }
 
+    /**
+     * initialez what info to get
+     * @param type
+     */
     public void initializeDependencies(String type){
         if(type.equals("class")){
             getClasses("AnDep");
@@ -161,6 +185,11 @@ public class Refactor {
         }
     }
 
+    /**
+     * sets up the dialog created
+     * @param names
+     * @param type
+     */
     public void getHelper(ArrayList names, String type) {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);
         dialog.setTitle("Refactor");
@@ -173,6 +202,11 @@ public class Refactor {
         }
     }
 
+    /**
+     * gets the new name set from the text input
+     * @param oldName the old name
+     * @param type method, field, or class
+     */
     public void getNewName(String oldName, String type){
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Choose New Name");
@@ -186,6 +220,12 @@ public class Refactor {
         }
     }
 
+    /**
+     * method that handles the refactoring using the visitor pattern
+     * @param oldName
+     * @param newName
+     * @param type class, method, or field
+     */
     public void refactorAll(String oldName, String newName, String type){
 
         String source = editController.getCurJavaCodeArea().getText();
@@ -286,6 +326,11 @@ public class Refactor {
         return findAllIndicesHelper(idxAccumulator, numCharsSearched, unsearchedText, substring);
     }
 
+    /**
+     * Deals with selecting the first instance of of the target
+     * @param names
+     * @param type
+     */
     private void selectNext(ArrayList names, String type) {
         ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);
         dialog.setTitle("Jump To");
@@ -298,7 +343,15 @@ public class Refactor {
         String   currentText       = currentCodeArea.getText();
         String   currentTarget     = "";
         if(result.isPresent()){
-            currentTarget = result.get();
+            if (type.equals("Fields")) {
+                currentTarget = result.get() + ";";
+            }
+            else if (type.equals("Methods")){
+                currentTarget = result.get() + "(";
+            }
+            else{
+                currentTarget = result.get() + "{";
+            }
         }
         boolean  targetHasChanged  = !Objects.equals(this.getTarget(), currentTarget);
         boolean  srcTextHasChanged = !Objects.equals(this.getTextToSearch(), currentText);
@@ -316,6 +369,11 @@ public class Refactor {
         }
     }
 
+    /**
+     * method for handling analyzingDependencies
+     * @param names
+     * @param type
+     */
     private void analyzeDependencies(ArrayList names, String type){
         ArrayList dependenciesList = new ArrayList();
         ChoiceDialog<String> dialog = new ChoiceDialog<>(type, names);

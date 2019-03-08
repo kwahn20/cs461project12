@@ -1,8 +1,14 @@
-class Main{
-    int x;
-int a;
-    int fieldError = 4; // testing FieldExpr
+class Main{   
+	int testInteger; 
+	int numVar;
+    	int x = 4; // x comment
 	void main(){
-		a = new int[4];
+		numVar = new int[4];
+		testInteger = 8;
+	}
+}
+
+class SecondMain{
+	void testMethod(){
 	}
 }

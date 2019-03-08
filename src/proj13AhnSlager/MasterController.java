@@ -210,7 +210,6 @@ public class MasterController {
      * @param event
      * @throws InterruptedException
      */
-
     @FXML public void handleScanAndParse(Event event) throws InterruptedException {
 
         this.console.clear();
@@ -234,54 +233,90 @@ public class MasterController {
         }
     }
 
+    /**
+     * handles the refactoring of a class
+     * @param event
+     */
     @FXML public void handleRefactorClass(Event event){
         if(this.parseRoot != null){
             this.editController.handleRefactor(this.parseRoot, "class");
         }
     }
 
+    /**
+     * handles the refactoring of a method
+     * @param event
+     */
     @FXML public void handleRefactorMethod(Event event){
         if(this.parseRoot != null){
             this.editController.handleRefactor(this.parseRoot, "method");
         }
     }
 
+    /**
+     * handles the refactoring of a field
+     * @param event
+     */
     @FXML public void handleRefactorField(Event event){
         if(this.parseRoot != null){
             this.editController.handleRefactor(this.parseRoot, "field");
         }
     }
 
+    /**
+     * handles the jumping to a class
+     * @param event
+     */
     @FXML public void handleJumpToClass(Event event){
         if(this.parseRoot != null){
             this.editController.handleJumpTo(this.parseRoot, "class");
         }
     }
 
+    /**
+     * handles the jumping to a method
+     * @param event
+     */
     @FXML public void handleJumpToMethod(Event event){
         if(this.parseRoot != null){
             this.editController.handleJumpTo(this.parseRoot, "method");
         }
     }
 
+    /**
+     * handles the jumping to a field
+     * @param event
+     */
     @FXML public void handleJumpToField(Event event){
         if(this.parseRoot != null){
             this.editController.handleJumpTo(this.parseRoot, "field");
         }
     }
 
+    /**
+     * handles the analyzing of dependencies of a class
+     * @param event
+     */
     @FXML public void handleAnDepClass(Event event){
         if(this.parseRoot != null){
             this.editController.handleAnDep(this.parseRoot, "class");
         }
     }
 
+    /**
+     * handles the analyzing of dependencies of a method
+     * @param event
+     */
     @FXML public void handleAnDepMethod(Event event){
         if(this.parseRoot != null){
             this.editController.handleAnDep(this.parseRoot, "method");
         }
     }
 
+    /**
+     * handles the analyzing of dependencies of a field
+     * @param event
+     */
     @FXML public void handleAnDepField(Event event){
         if(this.parseRoot != null){
             this.editController.handleAnDep(this.parseRoot, "field");
