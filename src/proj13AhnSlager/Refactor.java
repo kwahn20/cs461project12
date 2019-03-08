@@ -370,7 +370,7 @@ public class Refactor {
     }
 
     /**
-     * method for handling analyzingDependencies
+     * method for creating the dialog to handle the dependency analyzer
      * @param names
      * @param type
      */
