@@ -328,9 +328,15 @@ public class Refactor {
             String choice = result.get();
             dependenciesList = dependencyVisitor.initialize(this.parseRoot, choice);
         }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Analyze Dependencies");
+        alert.setHeaderText("The following variables are dependent on " + result.get());
+        String content = "";
         for(Object a: dependenciesList){
-            System.out.println(a.toString());
+            content = content + a.toString() + "\n";
         }
+        alert.setContentText(content);
+        alert.showAndWait();
 
 
 
